@@ -1,4 +1,3 @@
-
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,8 +11,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 public class ChatServer {
-    public static final int PORT = 59000;
+    public static final int PORT = 59100;
     private static final ArrayList<ClientConnectionData> clientList = new ArrayList<>();
+    public static int yesVotes = 0;
+    public static int noVotes = 0;
+    public static String userToKick = "";
+    public static ClientConnectionData clientToKick = null;
 
     public static void main(String[] args) throws Exception {
         ExecutorService pool = Executors.newFixedThreadPool(100);
@@ -101,6 +104,58 @@ public class ChatServer {
                         }
                     } else if (incoming.startsWith("QUIT")){
                         break;
+                    } else if (incoming.startsWith("VOTE")) {
+                        yesVotes = 0;
+                        noVotes = 0;
+                        clientToKick = null;
+                        userToKick = incoming.substring(5).trim();
+                        boolean userExists = false;
+                        for (ClientConnectionData client : clientList) {
+                            if (client.getUserName().equals(userToKick)) {
+                                userExists = true;
+                                clientToKick = client;
+                            }
+                        }
+                        if (userExists) {
+                            for (ClientConnectionData client : clientList){
+
+                                broadcast(String.format("Please vote by typing either typing /yes or /no to kick: %s", userToKick));
+                            }
+                        }
+
+                    } else if (incoming.startsWith("YES")) {
+                        yesVotes += 1;
+                        broadcast(String.format("Score: %s YES - %s NO.", String.valueOf(yesVotes), String.valueOf(noVotes)));
+                        broadcast(String.format("Total Votes Needed: %s", String.valueOf(clientList.size())));
+                        if (clientList.size() <= (yesVotes + noVotes)) {
+                            if (yesVotes >= noVotes) {
+                                synchronized (clientList) {
+                                    clientList.remove(clientToKick);
+                                }
+                                System.out.println(userToKick + " has been kicked.");
+                                broadcast(String.format("EXIT %s", clientToKick.getName()));
+                                try {
+                                    clientToKick.getSocket().close();
+                                } catch (IOException ex) {}
+                            }
+                        }
+                    } else if (incoming.startsWith("NO")) {
+                        noVotes += 1;
+                        broadcast(String.format("Score: %s YES - %s NO.", String.valueOf(yesVotes), String.valueOf(noVotes)));
+                        broadcast(String.format("Total Votes Needed: %s", String.valueOf(clientList.size())));
+                        if (clientList.size() <= (yesVotes + noVotes)) {
+                            if (yesVotes >= noVotes) {
+                                synchronized (clientList) {
+                                    clientList.remove(clientToKick);
+                                }
+                                System.out.println(userToKick + " has been kicked.");
+                                broadcast(String.format("EXIT %s", clientToKick.getName()));
+                                try {
+                                    clientToKick.getSocket().close();
+                                } catch (IOException ex) {
+                                }
+                            }
+                        }
                     }
                 }
 

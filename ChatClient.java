@@ -35,9 +35,20 @@ public class ChatClient {
         //send any messages read in, until /quit
         String line = userInput.nextLine().trim();
         while(!line.toLowerCase().startsWith("/quit")) {
-            String msg = String.format("CHAT %s", line);
-            out.println(msg);
-            line = userInput.nextLine().trim();
+            if (line.toLowerCase().startsWith("/vote")) {
+                out.println(String.format("VOTE %s", line.substring(6)));
+                line = userInput.nextLine().trim();
+            } else if (line.toLowerCase().startsWith("/yes")) {
+                out.println("YES");
+                line = userInput.nextLine().trim();
+            } else if (line.toLowerCase().startsWith("/no")) {
+                out.println("NO");
+                line = userInput.nextLine().trim();
+            } else {
+                String msg = String.format("CHAT %s", line);
+                out.println(msg);
+                line = userInput.nextLine().trim();
+            }
         }
         out.println("QUIT");
         out.close();
