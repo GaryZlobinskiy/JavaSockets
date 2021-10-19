@@ -1,3 +1,5 @@
+// By Ajay and Gary
+
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,7 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 public class ChatServer {
-    public static final int PORT = 59100;
+    public static final int PORT = 54321;
     private static final ArrayList<ClientConnectionData> clientList = new ArrayList<>();
     public static int yesVotes = 0;
     public static int noVotes = 0;
