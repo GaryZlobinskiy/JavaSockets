@@ -86,7 +86,7 @@ public class ChatClient {
                         String msg = user_msg[1].trim();
                         System.out.printf("\"%s\": %s\n", user, msg);
                     }
-                    if (incoming.startsWith("[̲̅$̲̅( ͡❛ ͜ʖ ͡❛)̲̅$̲̅]")) {
+                    if (incoming.startsWith("MONEY")) {
                         System.out.println("Collect your money: [̲̅$̲̅( ͡❛ ͜ʖ ͡❛)̲̅$̲̅]");
                     }
                     //EXIT

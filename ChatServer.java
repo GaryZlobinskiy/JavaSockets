@@ -162,7 +162,7 @@ public class ChatServer {
                             }
                         }
                     } else if (incoming.startsWith("PAYDAY")) {
-                        broadcast("[̲̅$̲̅( ͡❛ ͜ʖ ͡❛)̲̅$̲̅]");
+                        broadcast("MONEY");
                     }
                 }
 
