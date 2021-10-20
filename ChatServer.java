@@ -72,11 +72,14 @@ public class ChatServer {
         /**
          * Broadcasts a message to all clients connected to the server.
          */
+
+        // outgoing to client
         public void broadcast(String msg) {
             try {
                 System.out.println("Broadcasting -- " + msg);
                 synchronized (clientList) {
                     for (ClientConnectionData c : clientList){
+
                         c.getOut().println(msg);
                     }
                 }
@@ -158,6 +161,8 @@ public class ChatServer {
                                 }
                             }
                         }
+                    } else if (incoming.startsWith("PAYDAY")) {
+                        broadcast("[̲̅$̲̅( ͡❛ ͜ʖ ͡❛)̲̅$̲̅]");
                     }
                 }
 

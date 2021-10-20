@@ -46,11 +46,15 @@ public class ChatClient {
             } else if (line.toLowerCase().startsWith("/no")) {
                 out.println("NO");
                 line = userInput.nextLine().trim();
+            } else if (line.toLowerCase().startsWith("/payday")) {
+                out.println("PAYDAY");
+                line = userInput.nextLine().trim();
             } else {
                 String msg = String.format("CHAT %s", line);
                 out.println(msg);
                 line = userInput.nextLine().trim();
             }
+
         }
         out.println("QUIT");
         out.close();
@@ -59,6 +63,7 @@ public class ChatClient {
         socket.close();
     }
 
+    // incoming from server
     static class ServerListener implements Runnable {
 
         @Override
@@ -80,6 +85,9 @@ public class ChatClient {
                         String user = user_msg[0].trim();
                         String msg = user_msg[1].trim();
                         System.out.printf("\"%s\": %s\n", user, msg);
+                    }
+                    if (incoming.startsWith("[̲̅$̲̅( ͡❛ ͜ʖ ͡❛)̲̅$̲̅]")) {
+                        System.out.println("Collect your money: [̲̅$̲̅( ͡❛ ͜ʖ ͡❛)̲̅$̲̅]");
                     }
                     //EXIT
                     if (incoming.startsWith("EXIT")){
